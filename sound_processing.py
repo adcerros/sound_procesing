@@ -10,7 +10,7 @@ AUDIO_PARTS_FOLDER = AUDIO_FOLDER + "/audio_parts"
 
 # Recibe una pista de audio y retorna la transcripcion
 def audio_to_text(audio_folder=AUDIO_PARTS_FOLDER):
-    text_file = open("transcribed_audio.txt", "w+", encoding='utf8')
+    text_file = open("transcribed_audio.txt", "a", encoding='utf8')
     # create a speech recognition object
     r = sr.Recognizer()
     for audio_file in os.listdir(audio_folder):
@@ -26,6 +26,7 @@ def audio_to_text(audio_folder=AUDIO_PARTS_FOLDER):
             print("El audio es incomprensible")
         except sr.RequestError as e:
             print("No se an obtenido resultados del servidor al realizar el reconocimiento del audio")
+    text_file.write("\n")
     os.rmdir(AUDIO_PARTS_FOLDER)
 
 
