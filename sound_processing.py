@@ -29,6 +29,8 @@ def init_files_system():
 def remove_files_system():
     for filename in os.listdir(AUDIO_PARTS_FOLDER):
         os.remove(AUDIO_PARTS_FOLDER + "/" + filename)
+    os.remove("my_sound_reduced_noise.wav")
+    os.remove("my_sound_mono.wav")
     os.rmdir(AUDIO_PARTS_FOLDER)
 
 
@@ -94,7 +96,7 @@ def process_audio(file):
         # Reduccion de ruido
         audio_file_noise_reduction = noise_reduction(audio_file_mono)
         # Analisis de la reduccion de ruido
-        graph_audio_comparation(audio_file_mono, [audio_file_noise_reduction])
+        # graph_audio_comparation(audio_file_mono, [audio_file_noise_reduction])
 
         # Normalizacion del volumen
         # Analisis de la normalizacion del volumen
