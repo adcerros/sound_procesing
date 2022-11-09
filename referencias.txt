@@ -1,0 +1,6 @@
+ANALISIS AUDIO
+
+ffmpeg
+pydub
+speech_recognition
+noise_reduce
