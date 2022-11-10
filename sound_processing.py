@@ -80,7 +80,7 @@ def split_by_silences(audio_file):
 def noise_reduction(file):
     new_file = "my_sound_reduced_noise.wav"
     rate, data = wavfile.read(file)
-    reduced_noise = nr.reduce_noise(y=data, sr=rate)
+    reduced_noise = nr.reduce_noise(y=data, sr=rate, prop_decrease=0.65)
     wavfile.write(new_file, rate, reduced_noise)
     return new_file
 
@@ -102,7 +102,7 @@ def process_audio(file):
         # Analisis de la normalizacion del volumen
 
         # Split por silencios
-        audio_parts_files = split_by_silences(audio_file_mono)
+        audio_parts_files = split_by_silences(audio_file_noise_reduction)
         # Analisis del split por silencios
         graph_audio_comparation(audio_file_mono, audio_parts_files)
 
@@ -130,7 +130,7 @@ def plot_audio(audio_file, plot):
     signal = np.frombuffer(signal, dtype ="int16")
     fs = signal_wave.getframerate()
     # If Stereo
-    if signal_wave.getnchannels() == 2:
+    if signal_wave.getnchannels() >= 2:
         print("Just mono files")
         sys.exit(0)
     my_time = np.linspace(0, len(signal) / fs, num=len(signal))
