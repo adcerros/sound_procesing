@@ -24,5 +24,5 @@ expecteds = [   "esta es la primera prueba",
                 "en un lugar de la Mancha de cuyo nombre no quiero acordarme no ha mucho tiempo que vivía un hidalgo de los de lanza y astillero adarga antigua rocín flaco y galgo corredor"]
 
 for i, expected in enumerate(expecteds):
-    test(AUDIO_FOLDER + "/prueba_{0}.wav".format(i + 1), expected)
+    test(AUDIO_FOLDER + "/prueba_{}.wav".format(i + 1), expected)
 

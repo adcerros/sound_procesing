@@ -10,6 +10,7 @@ import numpy as np
 import wave
 from scipy.io import wavfile
 import noisereduce as nr
+import whisper
 
 
 
@@ -49,9 +50,18 @@ def audio_to_text(audio_file, text_file):
         print("No se an obtenido resultados del servidor al realizar el reconocimiento del audio")
 
 
+# Recibe una pista de audio y retorna la transcripcion
+def audio_to_text_transformer(audio_file, text_file):
+    model = whisper.load_model("large")
+    result = model.transcribe(audio_file)
+    return result["text"]
+
+
+# Recibe los fragmentos de una pista de audio y los convierte en texto
 def split_audios_to_text(audio_files, text_file_dir):
     text_file = open(text_file_dir, "a", encoding='utf8')
-    text = " ".join([audio_to_text(audio_file, text_file) for audio_file in audio_files])
+    print(audio_files)
+    text = " ".join([audio_to_text_transformer(audio_file, text_file) for audio_file in audio_files])
     text_file.write("\n")
     return text
 
@@ -71,7 +81,7 @@ def split_by_silences(audio_file):
     audio_parts = split_on_silence(audio, min_silence_len = 800, silence_thresh = -50, keep_silence=600)
     audio_parts_files = []
     for i, part in enumerate(audio_parts):
-        part_name = AUDIO_PARTS_FOLDER + "/audio_filtered_{0}.wav".format(i)
+        part_name = AUDIO_PARTS_FOLDER + "/audio_filtered_{}.wav".format(i)
         part.export(part_name, format="wav")
         audio_parts_files.append(part_name)
     return audio_parts_files
@@ -106,7 +116,7 @@ def process_audio(file):
         # Analisis del split por silencios
         graph_audio_comparation(audio_file_mono, audio_parts_files)
 
-        # Se transforman las partes a texto y se almacena en un fichero, se retorna el teto
+        # Se transforman las partes a texto y se almacena en un fichero, se retorna el texto
         text = split_audios_to_text(audio_parts_files, "transcribed_audio.txt")
 
         remove_files_system()
@@ -137,6 +147,7 @@ def plot_audio(audio_file, plot):
     plot.plot(my_time, signal)
 
 
+#Compara dos ondas de sonido graficamente
 def graph_audio_comparation(audio_file, parts_files):
     # Graph signal
     gs = gridspec.GridSpec(2, len(parts_files))
