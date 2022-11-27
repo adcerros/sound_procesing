@@ -7,14 +7,14 @@ AUDIO_FOLDER = "./audios"
 
 def test(file, expected):
     text = process_audio(file)
-    if text == expected:
+    if text.lower() == expected.lower():
         print("Test correcto")
         print("Texto:", text, "\n")
         pass
     else:
         print("Error en el test")
         print("Se esperaba:", expected)
-        print("Se recibe:", text, "\n")
+        print("Se recibe:", text.lower(), "\n")
 
 
 expecteds = [   "esta es la primera prueba",

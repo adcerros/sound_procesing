@@ -51,17 +51,18 @@ def audio_to_text(audio_file, text_file):
 
 
 # Recibe una pista de audio y retorna la transcripcion
-def audio_to_text_transformer(audio_file, text_file):
+def audio_to_text_whisper_model(audio_file, text_file):
     model = whisper.load_model("large")
     result = model.transcribe(audio_file)
+    text_file.write(result["text"] + "\n")
     return result["text"]
+
 
 
 # Recibe los fragmentos de una pista de audio y los convierte en texto
 def split_audios_to_text(audio_files, text_file_dir):
     text_file = open(text_file_dir, "a", encoding='utf8')
-    print(audio_files)
-    text = " ".join([audio_to_text_transformer(audio_file, text_file) for audio_file in audio_files])
+    text = " ".join([audio_to_text(audio_file, text_file) for audio_file in audio_files])
     text_file.write("\n")
     return text
 
@@ -114,7 +115,7 @@ def process_audio(file):
         # Split por silencios
         audio_parts_files = split_by_silences(audio_file_noise_reduction)
         # Analisis del split por silencios
-        graph_audio_comparation(audio_file_mono, audio_parts_files)
+        # graph_audio_comparation(audio_file_mono, audio_parts_files)
 
         # Se transforman las partes a texto y se almacena en un fichero, se retorna el texto
         text = split_audios_to_text(audio_parts_files, "transcribed_audio.txt")
