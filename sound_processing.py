@@ -11,6 +11,8 @@ import wave
 from scipy.io import wavfile
 import noisereduce as nr
 import whisper
+from huggingsound import SpeechRecognitionModel
+
 
 
 
@@ -58,11 +60,19 @@ def audio_to_text_whisper_model(audio_file, text_file):
     return result["text"]
 
 
+def audio_to_text_wav2vec (audio_file, text_file):
+    model = SpeechRecognitionModel("jonatasgrosman/wav2vec2-xls-r-1b-spanish")
+    audio_paths = [audio_file]
+    transcriptions = model.transcribe(audio_paths)
+    print(transcriptions[0]["transcription"])
+    text_file.write(transcriptions[0]["transcription"] + "\n")
+    return transcriptions[0]["transcription"]
+
 
 # Recibe los fragmentos de una pista de audio y los convierte en texto
 def split_audios_to_text(audio_files, text_file_dir):
     text_file = open(text_file_dir, "a", encoding='utf8')
-    text = " ".join([audio_to_text(audio_file, text_file) for audio_file in audio_files])
+    text = " ".join([audio_to_text_wav2vec(audio_file, text_file) for audio_file in audio_files])
     text_file.write("\n")
     return text
 
